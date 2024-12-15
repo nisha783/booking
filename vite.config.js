@@ -11,7 +11,6 @@ export default defineConfig({
                 // auth  theme css file 
 
                 'resources/assets/vendors/mdi/css/materialdesignicons.min.css',
-                'resources/assets/vendors/mdi/css/materialdesignicons.min.css',
                 'resources/assets/vendors/css/vendor.bundle.base.css',
                 'resources/assets/css/style.css',
                 'resources/assets/images/favicon.png',
@@ -38,4 +37,7 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {
+        outDir: 'public/build',  // Ensure this path is set correctly
+    }
 });
