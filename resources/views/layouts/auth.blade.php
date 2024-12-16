@@ -6,11 +6,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Corona Admin</title>
+    <!-- CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
     <!-- plugins:css -->
    @vite([
        'resources/assets/vendors/mdi/css/materialdesignicons.min.css',
                 'resources/assets/vendors/css/vendor.bundle.base.css"',
                 'resources/assets/css/style.css',
+                'resources/js/app.js',
    ])
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ Vite::asset('resources/assets/images/favicon.png')}}" />
