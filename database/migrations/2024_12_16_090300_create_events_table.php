@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained();
             $table->string('location');
             $table->bigInteger('price')->default(0);
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->date('start_time');
+            $table->date('end_time');
             $table->bigInteger('max_attendence')->default(1);
             $table->timestamps();
         });
