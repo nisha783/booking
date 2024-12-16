@@ -39,7 +39,6 @@ class EventController extends Controller
           return back()->withErrors('unable to find category,please choose the correct');
         }
      try{
-        dd($request->all());
         Event::create([
             'name'=> $request->name,
             'description'=> $request->description,
@@ -56,7 +55,7 @@ class EventController extends Controller
            return redirect()->route('events.index');
      }
      catch(\Exception $ex){
-        return back()->withErrors('something wenr wrong ', $ex->getmessage());
+        return back()->withInput()->withErrors('something wenr wrong ', $ex->getmessage());
      }
     }
 
