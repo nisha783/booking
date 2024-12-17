@@ -19,6 +19,7 @@
                 'resources/assets/css/style.css',
                 'resources/js/app.js',
    ])
+   @yield('css')
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ Vite::asset('resources/assets/images/favicon.png')}}" />
   </head>
@@ -347,5 +348,6 @@
                 'resources/assets/js/settings.js',
                 'resources/assets/js/todolist.js',
 ])
+@yield('script')
   </body>
 </html>
