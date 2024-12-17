@@ -17,8 +17,8 @@
                 <form method="POST" class="forms-sample" action="{{ route('events.store') }}">
                     @csrf
                     <div class="form-group">
-                        <label for="exampleInputName1">Name</label>
-                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Name">
+                        <label for="exampleInputName1">Event Name</label>
+                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Event Name">
                     </div>
                     <div class="form-group">
                         <label for="text">Description</label>
@@ -28,10 +28,10 @@
 
                     <div class="form-group">
                         <label for="exampleSelectGender">Categories</label>
-                        <select name="category" class="form-control" id="exampleSelectGender">
+                        <select name="category_id" class="form-control" id="exampleSelectGender">
                             <option value="" disabled selected>Choose Category</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" @selected(old('category') == $category->id)>{{ $category->name }}</option>
+                                <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -70,7 +70,7 @@
                     <div class="form-group">
                         <label for="exampleInputCity1">Max_attendence</label>
                         <input type="number" class="form-control" id="exampleInputCity1" name="max_attendence"
-                            placeholder="1">
+                            placeholder="1"  >
                     </div>
                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
                     <button class="btn btn-dark">Cancel</button>

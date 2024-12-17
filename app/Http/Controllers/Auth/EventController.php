@@ -16,7 +16,8 @@ class EventController extends Controller
     public function index()
     {
         //
-        return 'i am index page';
+        $events= Event::all();
+        return view('auth.events.index', compact('events'));
     }
 
     /**
@@ -34,30 +35,32 @@ class EventController extends Controller
      */
     public function store(CreateRequest $request)
     {
-        $category= Category::find($request->category);
-        if(!$category){
-          return back()->withErrors('unable to find category,please choose the correct');
+        $category = Category::find($request->category_id);
+    
+        if (!$category) {
+            return back()->withErrors('Unable to find category, please choose the correct one.');
         }
-     try{
-        Event::create([
-            'name'=> $request->name,
-            'description'=> $request->description,
-            'category'=> $request->category,
-            'type'=> $request->type,
-            'price'=> $request->price,
-            'location'=> $request->location,
-            'start_time'=> $request->start_time,
-            'end_time'=> $request->end_time,
-            'max_attendence'=> $request->max_attendence,
-           ]);
-
-           session()->flash('success_msg','Event  saved successfully!');
-           return redirect()->route('events.index');
-     }
-     catch(\Exception $ex){
-        return back()->withInput()->withErrors('something wenr wrong ', $ex->getmessage());
-     }
+    
+        try {
+            Event::create([
+                'name' => $request->name, // 'event' instead of 'name'
+                'description' => $request->description,
+                'type' => $request->type,
+                'category_id' => $category->id, // 'category_id' instead of 'category'
+                'location' => $request->location,
+                'price' => $request->price,
+                'start_time' => $request->start_time,
+                'end_time' => $request->end_time,
+                'max_attendence' => $request->max_attendence,
+            ]);
+    
+            session()->flash('success_msg', 'Event saved successfully!');
+            return redirect()->route('events.index');
+        } catch (\Exception $ex) {
+            return back()->withInput()->withErrors('Something went wrong: ' . $ex->getMessage());
+        }
     }
+    
 
     /**
      * Display the specified resource.

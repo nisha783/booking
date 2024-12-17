@@ -26,7 +26,7 @@ class CreateRequest extends FormRequest
 
             'name'=>'required|max:255 |string',
             'description'=>'required|max:255 |string',
-            'category'=>'required|max:255 |string',
+            'category_id'=>'required|max:255 |string',
             'location'=>'required|max:255 |string',
             'price'=>'required|max:255 |string',
             'type'=>'required|max:255 |string',
