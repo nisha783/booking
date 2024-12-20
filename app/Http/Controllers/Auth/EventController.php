@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index()
     {
         //
-        $events= Event::all();
+        $events = Event::all();
         return view('auth.events.index', compact('events'));
     }
 
@@ -26,8 +26,8 @@ class EventController extends Controller
     public function create()
     {
         //
-        $categories= Category::all();
-        return view('auth.events.create',compact('categories'));
+        $categories = Category::all();
+        return view('auth.events.create', compact('categories'));
     }
 
     /**
@@ -36,11 +36,11 @@ class EventController extends Controller
     public function store(CreateRequest $request)
     {
         $category = Category::find($request->category_id);
-    
+
         if (!$category) {
             return back()->withErrors('Unable to find category, please choose the correct one.');
         }
-    
+
         try {
             Event::create([
                 'name' => $request->name, // 'event' instead of 'name'
@@ -53,22 +53,26 @@ class EventController extends Controller
                 'end_time' => $request->end_time,
                 'max_attendence' => $request->max_attendence,
             ]);
-    
+
             session()->flash('success_msg', 'Event saved successfully!');
             return redirect()->route('events.index');
         } catch (\Exception $ex) {
             return back()->withInput()->withErrors('Something went wrong: ' . $ex->getMessage());
         }
     }
-    
+
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+
+    //
+    public function show($eventId)
     {
-        //
+        $event = Event::findOrFail($eventId);
+        return view('auth.events.show', compact('event'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

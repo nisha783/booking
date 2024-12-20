@@ -5,10 +5,10 @@
 @section('content')
     <a href="" class="mb-5">Events</a>
     <div class="conatiner">
-        @if (session('success_msg'))
+        @if(session('success_msg'))
             <div class="alert alert-success" role="alert">
                 <strong>Good Job!</strong>
-                {{ session()->get('success_msg') }}
+                {{session()->get('success_msg') }}
             </div>
         @endif
         @if (session('error_msg'))
@@ -25,17 +25,15 @@
                 <h4 class="card-title">Event </h4>
                 <div class="table-responsive">
                     @if (count($events) > 0)
-                        <table id="myTable" class="table table-striped">
+                        <table id="myTable" class="table">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Description</th>
                                     <th>Price</th>
                                     <th>Location</th>
-                                    <th>Category</th>
-                                    <th>Type</th>
                                     <th>Max_Attendence</th>
+                                    <th>Type</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -44,11 +42,10 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $event->name }}</td>
-                                        <td>{{ Str::limit($event->description, 20) }}</td>
                                         <td>{{ number_format($event->price, 2) }}</td>
                                         <td>{{ $event->location }}</td>
-                                        <td>{{ $event->category ? $event->category->name : '' }}</td>
-                                        <td>
+                                        <td>{{ $event->max_attendence }}</td>
+                                       <td>
                                             @if ($event->type == 'free')
                                                 <span class="badge badge-primary">{{ $event->type }}</span>
                                             @elseif ($event->type == 'paid')
@@ -57,9 +54,8 @@
                                                 <span class="badge badge-info">{{ $event->type }}</span>
                                             @endif
                                         </td>
-                                        <td>{{ $event->max_attendence }}</td>
                                         <td class="d-flex ms-3">
-                                            <a href="" class="btn btn-primary">Show</a>&nbsp;
+                                            <a href="{{ route('events.show', ['event' => $event->id]) }}" class="btn btn-primary">Show</a>&nbsp;
                                             <a href="" class="btn btn-success">Edit</a>&nbsp;
                                             <form action="">
                                                 <a href="" class="btn btn-danger">Delete</a>

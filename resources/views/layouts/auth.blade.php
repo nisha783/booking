@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Corona Admin</title>
+    <title>@yield('title')  | {{ config('app.name') }}</title>
     <!-- CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- JavaScript -->
@@ -20,6 +20,7 @@
                 'resources/js/app.js',
    ])
    @yield('css')
+   
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{ Vite::asset('resources/assets/images/favicon.png')}}" />
   </head>
@@ -133,7 +134,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="../../pages/icons/mdi.html">
+            <a class="nav-link" href="{{ Vite::asset('resources/pages/icons/mdi.html') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-contacts"></i>
               </span>
