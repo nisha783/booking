@@ -1,4 +1,7 @@
 @extends('layouts.auth')
+@section('title')
+Event Details
+@endsection
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
 @endsection
@@ -56,8 +59,10 @@
                                         </td>
                                         <td class="d-flex ms-3">
                                             <a href="{{ route('events.show', ['event' => $event->id]) }}" class="btn btn-primary">Show</a>&nbsp;
-                                            <a href="" class="btn btn-success">Edit</a>&nbsp;
-                                            <form action="">
+                                            <a href="{{ route('events.edit',['event' =>$event->id]) }}" class="btn btn-success">Edit</a>&nbsp;
+                                            <form action="{{ route('events.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                                @csrf
+                                                @method('DELETE')
                                                 <a href="" class="btn btn-danger">Delete</a>
                                             </form>
                                         </td>

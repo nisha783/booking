@@ -64,6 +64,9 @@ Event Details
                             <td>{{ $event->created_at->diffForHumans() }}</td>
                         </tr>
                 </table>
+                <br>
+                <p style="color: #6c7293"><b>Description:</b></p>
+                <p style="color: #6c7293">{{ $event->description }}</p>
                 @else
                 <p class="text-danger fw-bold">no event</p>
                 @endif
