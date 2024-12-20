@@ -6,6 +6,7 @@ Event Details
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+                <a href="{{ route('events.index') }} " class="p-3 btn btn-primary btn-md mt-3 mb-3 p-2">Go Back</a>
                 <h4 class="card-title">Events </h4>
                 <p class="card-description"> All Location of Events </p>
                 @if ($errors->any())

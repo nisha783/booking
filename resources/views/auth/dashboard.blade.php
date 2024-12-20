@@ -1,5 +1,7 @@
 @extends('layouts.auth')
-
+@section('title')
+    Event Details
+@endsection
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
 @endsection
