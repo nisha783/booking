@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use \Stripe\Checkout\Session;
+use Illuminate\Support\Facades\DB;
 use App\Models\Event;
+use App\Models\Booking;
 
 class HomeController extends Controller
 {
@@ -21,6 +24,82 @@ class HomeController extends Controller
 
     }
 
+
+
+
+    public function checkout(Request $request)
+    {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $userId = auth()->id();
+        $eventId = $request->event_id;
+
+        DB::beginTransaction();
+
+        try {
+            // Lock event row to prevent race conditions
+            $event = Event::where('id', $eventId)->lockForUpdate()->firstOrFail();
+
+            // Check if user has already booked the event
+            if ($this->isUserAlreadyRegistered($userId, $eventId)) {
+                throw new \Exception('You are already registered for this event.');
+            }
+
+            // Check if there are seats available
+            if ($event->max_attendees <= 0) {
+                throw new \Exception('Event seats are booked. You can enroll in another event.');
+            }
+
+            // Save booking in the database
+            $this->saveEventInDatabase($userId, $eventId, $event->type == 'PAID' ? 'unpaid' : 'free');
+
+            // Decrement available seats
+            $event->decrement('max_attendees');
+
+            DB::commit();
+
+            // Redirect to payment if event is PAID
+            if ($event->type == 'PAID') {
+                return $this->createStripeCheckoutSession($event, $userId);
+            }
+
+            // Confirm free event booking
+            return to_route('site.thanku')->with('success_msg', 'Your Booking Confirmed!');
+
+        } catch (\Exception $ex) {
+            DB::rollback();
+            return back()->with('booking_failed', $ex->getMessage());
+        }
+    }
+
+    private function createStripeCheckoutSession($event, $userId)
+    {
+        $checkoutSession = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'usd',
+                    'product_data' => [
+                        'name' => $event->name,
+                    ],
+                    'unit_amount' => $event->price * 100, // Price in cents
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            'metadata' => [
+                'user_id' => $userId,
+                'event_id' => $event->id,
+            ],
+            'success_url' => route('site.thanku') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('site.cancel') . '?session_id={CHECKOUT_SESSION_ID}',
+        ]);
+
+        session()->flash('success_msg', 'Your Booking Confirmed');
+        session()->put('event_type', 'PAID');
+
+        return redirect($checkoutSession->url);
+    }
     public function openThankuPage()
     {
        
@@ -33,4 +112,26 @@ class HomeController extends Controller
         return view('site.cancel');
     }
     
+    private function isUserAlreadyRegistered($userId, $eventId)
+    {
+        return Booking::where('user_id', $userId)
+            ->where('event_id', $eventId)
+            ->where(function($query) {
+                $query->where('status', 'paid')->orWhere('status', 'free');
+            })
+            ->exists();
+    }
+    //
+    private function saveEventInDatabase($userId, $eventId, $status)
+    {
+        try {
+            Booking::create([
+                'user_id' => $userId,
+                'event_id' => $eventId,
+                'status' => $status,
+            ]);
+        } catch (\Exception $ex) {
+            return back()->with('booking_failed', 'Your booking failed, please try again!');
+        }
+    }
 }
