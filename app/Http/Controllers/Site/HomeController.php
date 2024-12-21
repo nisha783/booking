@@ -51,7 +51,7 @@ class HomeController extends Controller
             }
 
             // Save booking in the database
-            $this->saveEventInDatabase($userId, $eventId, $event->type == 'PAID' ? 'unpaid' : 'free');
+            $this->saveEventInDatabase($userId, $eventId, $event->type == 'paid' ? 'unpaid' : 'free');
 
             // Decrement available seats
             $event->decrement('max_attendees');
@@ -102,13 +102,21 @@ class HomeController extends Controller
     }
     public function openThankuPage()
     {
-       
+        if (session()->has('event_type') && session()->get('event_type') == 'PAID') {
+            $this->updateBookingStatusToPaid();
+        }
+
+        session()->forget('event_type');
         return view('site.thanku');
     }
 
     public function openCancelPage()
     {
-       
+        if (session()->has('event_type') && session()->get('event_type') == 'PAID') {
+            $this->cancelBookingAndReleaseSeat();
+        }
+
+        session()->forget('event_type');
         return view('site.cancel');
     }
     
