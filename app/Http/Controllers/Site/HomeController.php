@@ -4,19 +4,20 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Event;
 
 class HomeController extends Controller
 {
     //
     public function  openHomePage(){
-        return view('site.index');
-
-
+        $events = Event::with(['category'])->get();
+        return view('site.index',compact('events'));
     }
 
 
-    public function  openEventDetailsPage(){
-        return view('site.details');
+    public function  openEventDetailsPage($id){
+        $event = Event::findOrFail($id);
+        return view('site.details',compact('event'));
 
     }
 

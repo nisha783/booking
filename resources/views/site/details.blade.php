@@ -1,8 +1,8 @@
 @extends('layouts.site')
 
 @section('css')
-<style>
-    body {
+    <style>
+        body {
             background: linear-gradient(135deg, #e0e7ff 0%, #e0f7fa 100%);
             font-family: Arial, sans-serif;
             color: #333;
@@ -18,11 +18,13 @@
             border-radius: 12px;
             box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
         }
+
         .header-section h1 {
             font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 1rem;
         }
+
         .header-section p {
             font-size: 1.2rem;
             color: #f5f5f5;
@@ -47,6 +49,7 @@
             justify-content: center;
             margin-bottom: 1.5rem;
         }
+
         .event-placeholder i {
             font-size: 5rem;
             color: #5dbf73;
@@ -76,18 +79,18 @@
             transform: scale(1.05);
             box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
         }
-</style>
+    </style>
 
-<script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 @endsection
 
 @section('content')
 
 @section('header')
-<div class="header-section">
-    <h1>Event Details</h1>
-    <p>Get all the details about the event and complete your booking below.</p>
-</div>
+    <div class="header-section">
+        <h1>Event Details</h1>
+        <p>Get all the details about the event and complete your booking below.</p>
+    </div>
 @endsection
 
 <div class="container my-5">
@@ -117,7 +120,7 @@
 
                     <p class="card-text"><strong>Price:</strong>
 
-                        @if ($event->type == 'PAID')
+                        @if ($event->type == 'free')
                             <span> ${{ $event->price }} </span>
                         @else
                             <span> <span class="badge badge-free">Free</span></span>
@@ -127,16 +130,25 @@
 
 
                     <p class="card-text"><strong>Location:</strong> {{ $event->location }}</p>
-                    <p class="card-text"><strong>Category:</strong> {{ $event->category ? $event->category->name: '' }} </p>
-                    <p class="card-text"><strong>Start Date:</strong> {{ date('D M Y', strtotime($event->start_date)) }} </p>
-                    <p class="card-text"><strong>End Date:</strong> {{ date('D M Y', strtotime($event->end_date)) }} </p>
+                    <p class="card-text"><strong>Category:</strong> {{ $event->category ? $event->category->name : '' }}
+                    </p>
+                    <p class="card-text"><strong>Start Date:</strong> {{ date('D M Y', strtotime($event->start_date)) }}
+                    </p>
+                    <p class="card-text"><strong>End Date:</strong> {{ date('D M Y', strtotime($event->end_date)) }}
+                    </p>
                     <p class="card-text"><strong>Max Attendees:</strong> {{ $event->max_attendees }}</p>
                     <p class="card-text"><strong>Description:</strong> {{ $event->description }}</p>
+
+                    @if ($event->type == 'PAID')
+                        <P class="price-badge">$ {{ $event->price }}</P>
+                    @else
+                        <p><span class="price-badge-free">free</span> </p>
+                    @endif
 
                     </p>
 
                     <div class="text-center">
-                        <form action="{{ route('checkout') }}">
+                        <form action="">
                             <input type="hidden" name="event_id" value="{{ $event->id }}">
                             <button class="btn btn-success btn-lg">Checkout</button>
                         </form>
@@ -144,8 +156,6 @@
 
                 </div>
             </div>
-
-
         @else
             <p class="text-danger text-center text-bold mt-3">Unable to find the event details.</p>
         @endif

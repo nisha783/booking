@@ -32,7 +32,36 @@
         <div class="row g-4">
             <!-- Event Card Template - Repeat for Each Event -->
 
-         
+            @if (count($events) > 0)
+                @foreach ($events as $event)
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            {{ $event->name }}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Location:</strong> {{ $event->location }}</p>
+                            <p class="card-text"><strong>Category:</strong> {{ $event->category ? $event->category->name : '' }} </p>
+                            <p class="card-text"><strong>Start Date:</strong> {{ date('D M Y', strtotime($event->start_date)) }}</p>
+                            <p class="card-text"><strong>End Date:</strong> {{ date('D M Y', strtotime($event->end_date)) }}</p>
+                            <p class="card-text"><strong>Seats Left:</strong> {{ $event->max_attendees }}</p>
+                            <p class="price">
+                                @if ($event->type == 'PAID')
+                                  ${{ $event->price }}
+                                @else
+                                    <span class="badge badge-free">Free</span>
+                                @endif
+                            </p>
+                            <a href="{{ route('site.details', $event->id) }}" class="btn w-100" style="background-color: #1e8d52; color:white">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                @endforeach
+            @else
+            <p class="text-danger text-bold text-center pt-3"><b>No Event Held yet.</b></p>
+            @endif
 
 
             <!-- Additional Event Cards here -->
@@ -57,6 +86,21 @@
 
         </div>
 
+        @if (count($events) > 9)
+            <nav aria-label="Event pagination" class="mt-4">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        @endif
     </div>
 </div>
 @endsection
