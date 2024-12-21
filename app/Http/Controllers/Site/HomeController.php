@@ -59,7 +59,7 @@ class HomeController extends Controller
             DB::commit();
 
             // Redirect to payment if event is PAID
-            if ($event->type == 'PAID') {
+            if ($event->type == 'paid') {
                 return $this->createStripeCheckoutSession($event, $userId);
             }
 
