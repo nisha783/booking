@@ -45,9 +45,9 @@
                             <p class="card-text"><strong>Category:</strong> {{ $event->category ? $event->category->name : '' }} </p>
                             <p class="card-text"><strong>Start Date:</strong> {{ date('D M Y', strtotime($event->start_date)) }}</p>
                             <p class="card-text"><strong>End Date:</strong> {{ date('D M Y', strtotime($event->end_date)) }}</p>
-                            <p class="card-text"><strong>Seats Left:</strong> {{ $event->max_attendees }}</p>
+                            <p class="card-text"><strong>Seats Left:</strong> {{ $event->max_attendence }}</p>
                             <p class="price">
-                                @if ($event->type == 'PAID')
+                                @if ($event->type == 'paid')
                                   ${{ $event->price }}
                                 @else
                                     <span class="badge badge-free">Free</span>

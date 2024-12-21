@@ -120,15 +120,13 @@
 
                     <p class="card-text"><strong>Price:</strong>
 
-                        @if ($event->type == 'free')
+                        @if ($event->type == 'paid')
                             <span> ${{ $event->price }} </span>
                         @else
                             <span> <span class="badge badge-free">Free</span></span>
                         @endif
 
                     </p>
-
-
                     <p class="card-text"><strong>Location:</strong> {{ $event->location }}</p>
                     <p class="card-text"><strong>Category:</strong> {{ $event->category ? $event->category->name : '' }}
                     </p>
@@ -136,19 +134,14 @@
                     </p>
                     <p class="card-text"><strong>End Date:</strong> {{ date('D M Y', strtotime($event->end_date)) }}
                     </p>
-                    <p class="card-text"><strong>Max Attendees:</strong> {{ $event->max_attendees }}</p>
+                    <p class="card-text"><strong>Max_Attendence:</strong> {{ $event->max_attendence }}</p>
                     <p class="card-text"><strong>Description:</strong> {{ $event->description }}</p>
 
-                    @if ($event->type == 'PAID')
-                        <P class="price-badge">$ {{ $event->price }}</P>
-                    @else
-                        <p><span class="price-badge-free">free</span> </p>
-                    @endif
 
                     </p>
 
                     <div class="text-center">
-                        <form action="">
+                        <form action="{{ route('checkout') }}">
                             <input type="hidden" name="event_id" value="{{ $event->id }}">
                             <button class="btn btn-success btn-lg">Checkout</button>
                         </form>

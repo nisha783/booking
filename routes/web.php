@@ -20,6 +20,7 @@ Route::prefix('auth')->middleware(['auth', 'verified'])->group(function(){
 });
 Route::get('/',[HomeCOntroller::class,'openHomePage'])->name('site.home');
 Route::get('event/{id}',[HomeCOntroller::class,'openEventDetailsPage'])->name('site.details');
+Route::get('checkout',[HomeController::class, 'checkout'])->name('checkout')->middleware('auth');
 
 Route::get('thanku', [HomeCOntroller ::class,'openThankuPage'])->name('thanku');
 Route::get('cancel', [HomeCOntroller ::class,'openCancelPage'])->name('cancel');
