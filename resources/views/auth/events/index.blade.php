@@ -21,7 +21,9 @@
             </div>
         @endif
     </div>
-    <a href="{{ route('events.create') }} " class="btn btn-primary btn-md mt-3 mb-3 p-2">New Events</a>
+               @if (auth()->user()->role == 'admin')
+                <a href="{{ route('events.create') }}" class="btn btn-info">New Event</a>
+            @endif
     <div class="col-lg-12 grid-margin stretch-card mt-3">
         <div class="card">
             <div class="card-body">

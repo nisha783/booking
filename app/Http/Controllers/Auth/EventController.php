@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\Event\UpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Event;
+use App\Models\Booking;
 
 class EventController extends Controller
 {
@@ -17,7 +18,15 @@ class EventController extends Controller
     public function index()
     {
         //
-        $events = Event::all();
+        $user=auth()->user();
+        if($user->role == 'user'){
+            $booking= Booking::where('user_id',$user->id)->where('status','paid')->pluck('event_id');
+            $events=Event::whereIn('id', $booking)->get();
+        }
+        else{
+
+            $events = Event::all();
+        }
         return view('auth.events.index', compact('events'));
     }
 
@@ -27,6 +36,8 @@ class EventController extends Controller
     public function create()
     {
         //
+
+        auth()->user()->checkRoleOrAbort();
         $categories = Category::all();
         return view('auth.events.create', compact('categories'));
     }
@@ -81,6 +92,7 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         //
+        auth()->user()->checkRoleOrAbort();
         $categories = Category::all();
 
         return view('auth.events.edit',compact('categories' ,'event'));
@@ -92,7 +104,7 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         
-    
+        auth()->user()->checkRoleOrAbort();
         $category = Category::find($request->category_id);
     
         if (!$category) {
@@ -128,6 +140,7 @@ class EventController extends Controller
     public function destroy($id)
     {
         //
+        auth()->user()->checkRoleOrAbort();
         try {
             $event = Event::findOrFail($id); // Find the event by ID
             $event->delete(); // Delete the event from the database
